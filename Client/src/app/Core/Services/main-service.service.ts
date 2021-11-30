@@ -28,7 +28,7 @@ export class MainServiceService {
   constructor(private http: HttpClient, private appVariables: HttpVariables) { }
 
   public FetchCompany_AData(company: IcompanyDataReq): Observable<IcompanyDataRes[]> {
-console.log(this.appVariables.fetchCompany_AData,company)
+
     return this.http.post<IcompanyDataRes[]>(this.appVariables.fetchCompany_AData,company)
       .pipe(
         tap(data => {

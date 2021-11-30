@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Server.Models;
 
@@ -6,81 +7,62 @@ namespace Server.Controllers
 {
     [Route("api")]
     [ApiController]
+    [AllowAnonymous]
     public class Company_AController : ControllerBase
     {
-        [HttpPost("company_a")]
-        // public async Task<IActionResult> RegisterTrainer(authReqForData reqData)
-        // {
-        //     string user_name = authReqForData;
-        //     var verifyTrainer = await this._trainerRepo.verifyTrainer(user_name);
-            
-        //     if(verifyTrainer == null )
-        //     {
-        //         var trainerModel = _mapper.Map<Trainer>(trainer);
-        //         this._trainerRepo.registerTrainer(trainerModel);
-        //         await this._trainerRepo.saveTrainerAsync();
-        //         return StatusCode(201, "New Trainer has been created!" );
-        //     }
+        private readonly FakeData _DB;
+        private readonly IAuthManager AuthenicationManager;
 
-        //     return BadRequest("There is already a Trainer exists with this user name");
-        // }
+        public Company_AController(FakeData DB, IAuthManager AuthManager)
+        {
+            this._DB = DB;
+            this.AuthenicationManager = AuthManager;
+        }
 
         [HttpPost("company_a")]
         public async Task<IActionResult> FetchCompanyA_Data(authReqForData reqData)
         {
             string company_name = reqData.company_name;
-            string Token = reqData.Token;
 
-            var loginTrainer = Token;
-            await this._trainerRepo.loginTrainer(user_name, password);
-            
-            // if(loginTrainer == null)
-            // {
-            //     return Unauthorized("Invalid User Name Or Password");
-            // }
+            var compAData = new ResForData();
+            compAData.CompanyData = this._DB.fetchCompAData();
+            compAData.Token = AuthenticateReq(company_name);
 
-            // var loginRes = new TrainerLoginResDto();
-            // loginRes.user_name = loginTrainer.user_name;
-            // loginRes.Token = CreateJWT(loginTrainer);
+            return Ok(compAData);
+        }
 
-            return Ok(reqData);
+        [HttpPost("company_b")]
+        public async Task<IActionResult> FetchCompanyB_Data(authReqForData reqData)
+        {
+            string company_name = reqData.company_name;
+
+            var compAData = new ResForData();
+            compAData.CompanyData = await this._DB.fetchCompBData();
+            compAData.Token = AuthenticateReq(company_name);
+
+            return Ok(compAData);
+        }
+
+        [HttpPost("company_c")]
+        public async Task<IActionResult> FetchCompanyC_Data(authReqForData reqData)
+        {
+            string company_name = reqData.company_name;
+
+            var compAData = new ResForData();
+            compAData.CompanyData = this._DB.fetchCompCData();
+            compAData.Token = AuthenticateReq(company_name);
+
+            return Ok(compAData);
+        }
+
+        public string AuthenticateReq(string company_name)
+        {
+            var token = this.AuthenicationManager.Authenticate(company_name);
+
+            if(token == null)
+                return "Unauthorized";
+
+            return token;
         }
     }
 }
-
-
-        //  public async Task<IActionResult> RegisterTrainer(TrainerRegisterDto trainer)
-        // {
-        //     string user_name = trainer.user_name;
-        //     var verifyTrainer = await this._trainerRepo.verifyTrainer(user_name);
-            
-        //     if(verifyTrainer == null )
-        //     {
-        //         var trainerModel = _mapper.Map<Trainer>(trainer);
-        //         this._trainerRepo.registerTrainer(trainerModel);
-        //         await this._trainerRepo.saveTrainerAsync();
-        //         return StatusCode(201, "New Trainer has been created!" );
-        //     }
-
-        //     return BadRequest("There is already a Trainer exists with this user name");
-        // }
-
-        // [HttpPost("login")]
-        // public async Task<IActionResult> LoginTrainer(TrainerLoginReqDto trainerLogin)
-        // {
-        //     string user_name = trainerLogin.user_name;
-        //     string password = trainerLogin.password;
-
-        //     var loginTrainer = await this._trainerRepo.loginTrainer(user_name, password);
-            
-        //     if(loginTrainer == null)
-        //     {
-        //         return Unauthorized("Invalid User Name Or Password");
-        //     }
-
-        //     var loginRes = new TrainerLoginResDto();
-        //     loginRes.user_name = loginTrainer.user_name;
-        //     loginRes.Token = CreateJWT(loginTrainer);
-
-        //     return Ok(_mapper.Map<TrainerLoginResDto>(loginRes));
-        // }

@@ -1,0 +1,11 @@
+<p>company-b page</p>
+<div>
+    <button class="back" (click)="backToHome()">Go Back To Home</button>
+</div>
+
+<div>
+    <span>Company B Data:</span>
+    <div *ngFor="let data of companyData$ | async">
+        <p>{{data}}</p>
+    </div>
+</div>

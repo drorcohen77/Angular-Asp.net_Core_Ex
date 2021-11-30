@@ -1,0 +1,11 @@
+<p>company-a works!</p>
+<div>
+    <button class="back" (click)="backToHome()">Go Back To Home</button>
+</div>
+
+<div>
+    <span>Company A Data:</span>
+    <div *ngFor="let data of companyData$ | async">
+        <p>{{data}}</p>
+    </div>
+</div>

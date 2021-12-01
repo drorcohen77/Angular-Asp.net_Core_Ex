@@ -5,7 +5,11 @@
 
 <div>
     <span>Company C Data:</span>
-    <div *ngFor="let data of companyData$ | async">
-        <p>{{data}}</p>
+    <!-- <div *ngFor="let data of companyData$ | async">
+        <p>{{data | json}}</p>
+    </div> -->
+
+    <div class="divChart">
+        <canvas id="myChart">{{chart}}</canvas>
     </div>
 </div>

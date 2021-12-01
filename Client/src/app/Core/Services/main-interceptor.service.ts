@@ -1,11 +1,12 @@
-import { HttpInterceptor, HttpHandler, HttpRequest } from "@angular/common/http";
+import { HttpInterceptor, HttpHandler, HttpRequest, HttpEvent } from "@angular/common/http";
+import { Observable } from "rxjs";
 
 export class MainInterceptorService implements HttpInterceptor{
 
-    intercept(req: HttpRequest<any>, next:HttpHandler) {
+    intercept(req: HttpRequest<any>, next:HttpHandler)  {
         
         const modifiedReq = req.clone({
-            headers: req.headers.set('Token', '1234')
+            headers: req.headers.append('Authorization', '1234')
         });
         return next.handle(modifiedReq);
     };

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import Chart from 'chart.js/auto';
 import { Observable } from 'rxjs';
 import { IcompanyDataRes } from 'src/app/Core/Models/Company.model';
 import { MainServiceService } from 'src/app/Core/Services/main-service.service';
@@ -11,11 +12,46 @@ import { MainServiceService } from 'src/app/Core/Services/main-service.service';
 })
 export class CompanyBComponent implements OnInit {
 
-  public companyData$?: Observable<IcompanyDataRes[]> = this.mainService.RetrievedCompData_B;
-
+  public companyData$: Observable<IcompanyDataRes[]> = this.mainService.RetrievedCompData_B;
+  public empNumber: Array<number> = [];
+  public months: Array<string> = [];
+  public chart: any;
+  
   constructor(private mainService: MainServiceService, private nav: Router) { }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+
+    this.companyData$.subscribe(data => {
+
+      this.empNumber = data.map(({employees_number}) => employees_number);
+      this.months = data.map(({month}) => month);
+    });
+
+    this.createChart();
+  }
+
+  private createChart(): void {
+
+    this.chart = new Chart("myChart", {
+      type: 'line',
+      data: {
+        labels: this.months,
+        datasets: [{
+          label: '# Company B Employees',
+          data: this.empNumber,
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          }
+        }
+      }
+    });
   }
 
   backToHome() {

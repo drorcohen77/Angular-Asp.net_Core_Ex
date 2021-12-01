@@ -27,36 +27,30 @@ export class MainServiceService {
   
   constructor(private http: HttpClient, private appVariables: HttpVariables) { }
 
-  public FetchCompany_AData(company: IcompanyDataReq): Observable<IcompanyDataRes[]> {
+  public FetchCompany_AData(company: IcompanyDataReq): void {
 
-    return this.http.post<IcompanyDataRes[]>(this.appVariables.fetchCompany_AData,company)
-      .pipe(
-        tap(data => {
-          this.company_A_Data = data;
+    this.http.post<IcompanyDataRes[]>(this.appVariables.fetchCompany_AData,company)
+      .subscribe((res: any) => {
+          this.company_A_Data = res.companyData;
           this.comp_A_Data$.next(this.company_A_Data);
-        })
-      );
+        });
   };
 
-  public FetchCompany_BData(company: IcompanyDataReq): Observable<IcompanyDataRes[]> {
+  public FetchCompany_BData(company: IcompanyDataReq): void {
 
-    return this.http.post<IcompanyDataRes[]>(this.appVariables.fetchCompany_BData,company)
-      .pipe(
-        tap(data => {
-          this.company_B_Data = data;
-          this.comp_B_Data$.next(this.company_B_Data);
-        })
-      );
+    this.http.post<IcompanyDataRes[]>(this.appVariables.fetchCompany_BData,company)
+      .subscribe((res: any) => {
+        this.company_B_Data = res.companyData;
+        this.comp_B_Data$.next(this.company_B_Data);
+      });
   };
 
-  public FetchCompany_CData(company: IcompanyDataReq): Observable<IcompanyDataRes[]> {
+  public FetchCompany_CData(company: IcompanyDataReq): void {
 
-    return this.http.post<IcompanyDataRes[]>(this.appVariables.fetchCompany_CData,company)
-      .pipe(
-        tap(data => {
-          this.company_C_Data = data;
+    this.http.post<IcompanyDataRes[]>(this.appVariables.fetchCompany_CData,company)
+      .subscribe((res: any) => {
+          this.company_C_Data = res.companyData;
           this.comp_C_Data$.next(this.company_C_Data);
-        })
-      );
+        });
   };
 }

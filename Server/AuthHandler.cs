@@ -55,6 +55,7 @@ namespace Server
         private AuthenticateResult ValidateToken(string token)
         {
             var validateToken = authManager.Tokens.FirstOrDefault(t => t.Key == token);
+            
             if(validateToken.Key == null)
             {
                 return AuthenticateResult.Fail("Unauthorized");

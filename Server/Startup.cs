@@ -11,6 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Server.Controllers;
+using Server.Data;
 
 namespace Server
 {
@@ -28,7 +30,11 @@ namespace Server
         {
 
             services.AddControllers();
+            services.AddScoped<IAuthManager,AuthManager>();
+            services.AddScoped<IFakeData,FakeData>();
             services.AddCors();
+            services.AddAuthentication("basic")
+                .AddScheme<BasicAuthenticationOptions,AuthHandler>("basic",null);
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Server", Version = "v1" });
@@ -45,13 +51,15 @@ namespace Server
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Server v1"));
             }
 
-            app.UseHttpsRedirection();
-
             app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod() );
+
+            app.UseHttpsRedirection();
             
             app.UseHttpsRedirection();
             
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

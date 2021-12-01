@@ -13,11 +13,8 @@ namespace Server
         public IDictionary<string,string> Tokens => tokens;
         public string Authenticate(string company)
         {
-           foreach(string item in _company)
-           {
-               if(item != company)
-                    return null;
-           } 
+            if(! _company.Contains(company))
+                return null;
 
             string Token = "1234";
 

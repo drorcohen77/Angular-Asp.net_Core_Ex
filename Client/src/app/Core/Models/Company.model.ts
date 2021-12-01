@@ -2,10 +2,10 @@
 export interface IcompanyDataRes {
 
     month: string;
-    empNumber: number; 
+    employees_number: number; 
 }
 
 export interface IcompanyDataReq {
 
-    Name: string; 
+    company_name: string; 
 }

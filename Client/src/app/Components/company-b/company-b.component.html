@@ -5,7 +5,8 @@
 
 <div>
     <span>Company B Data:</span>
-    <div *ngFor="let data of companyData$ | async">
-        <p>{{data}}</p>
+
+    <div class="divChart">
+        <canvas id="myChart">{{chart}}</canvas>
     </div>
 </div>

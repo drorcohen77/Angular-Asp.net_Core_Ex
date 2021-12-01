@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Server.Data;
 using Server.Models;
 
 namespace Server.Controllers
@@ -8,12 +11,12 @@ namespace Server.Controllers
     [Route("api")]
     [ApiController]
     [AllowAnonymous]
-    public class Company_AController : ControllerBase
+    public class CompanyDataController : ControllerBase
     {
-        private readonly FakeData _DB;
+        private readonly IFakeData _DB;
         private readonly IAuthManager AuthenicationManager;
 
-        public Company_AController(FakeData DB, IAuthManager AuthManager)
+        public CompanyDataController(IFakeData DB, IAuthManager AuthManager)
         {
             this._DB = DB;
             this.AuthenicationManager = AuthManager;
@@ -25,8 +28,15 @@ namespace Server.Controllers
             string company_name = reqData.company_name;
 
             var compAData = new ResForData();
-            compAData.CompanyData = this._DB.fetchCompAData();
             compAData.Token = AuthenticateReq(company_name);
+
+            if(compAData.Token == null)
+                return Unauthorized();
+
+            if(!this._DB.CompanyValidation.Contains(company_name))
+                return BadRequest(company_name +" Not Found As Requested!");
+                
+            compAData.CompanyData = await this._DB.fetchCompAData();
 
             return Ok(compAData);
         }
@@ -36,11 +46,18 @@ namespace Server.Controllers
         {
             string company_name = reqData.company_name;
 
-            var compAData = new ResForData();
-            compAData.CompanyData = await this._DB.fetchCompBData();
-            compAData.Token = AuthenticateReq(company_name);
+            var compBData = new ResForData();
+            compBData.Token = AuthenticateReq(company_name);
 
-            return Ok(compAData);
+            if(compBData.Token == null)
+                return Unauthorized();
+
+            if(!this._DB.CompanyValidation.Contains(company_name))
+                return BadRequest("Not Found Company As Requested!");
+
+            compBData.CompanyData = await this._DB.fetchCompBData();
+
+            return Ok(compBData);
         }
 
         [HttpPost("company_c")]
@@ -48,11 +65,19 @@ namespace Server.Controllers
         {
             string company_name = reqData.company_name;
 
-            var compAData = new ResForData();
-            compAData.CompanyData = this._DB.fetchCompCData();
-            compAData.Token = AuthenticateReq(company_name);
+            var compCData = new ResForData();
+            compCData.Token = AuthenticateReq(company_name);
 
-            return Ok(compAData);
+            if(compCData.Token == null)
+                return Unauthorized();
+
+            if(!this._DB.CompanyValidation.Contains(company_name))
+                return BadRequest("Not Found Company As Requested!" );
+
+            compCData.CompanyData = await this._DB.fetchCompCData();
+
+
+            return Ok(compCData);
         }
 
         public string AuthenticateReq(string company_name)

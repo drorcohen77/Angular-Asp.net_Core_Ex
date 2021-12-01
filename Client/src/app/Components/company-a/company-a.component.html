@@ -1,11 +1,12 @@
-<p>company-a works!</p>
+<p>company-a page</p>
 <div>
     <button class="back" (click)="backToHome()">Go Back To Home</button>
 </div>
 
 <div>
     <span>Company A Data:</span>
-    <div *ngFor="let data of companyData$ | async">
-        <p>{{data}}</p>
+
+    <div class="divChart">
+        <canvas id="myChart">{{chart}}</canvas>
     </div>
 </div>

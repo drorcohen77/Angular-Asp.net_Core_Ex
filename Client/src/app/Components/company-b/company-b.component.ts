@@ -13,8 +13,8 @@ import { MainServiceService } from 'src/app/Core/Services/main-service.service';
 export class CompanyBComponent implements OnInit {
 
   public companyData$: Observable<IcompanyDataRes[]> = this.mainService.RetrievedCompData_B;
-  public empNumber: Array<number> = [];
-  public months: Array<string> = [];
+  private empNumber: Array<number> = [];
+  private months: Array<string> = [];
   public chart: any;
   
   constructor(private mainService: MainServiceService, private nav: Router) { }
@@ -45,6 +45,7 @@ export class CompanyBComponent implements OnInit {
         }]
       },
       options: {
+        maintainAspectRatio:  false,
         scales: {
           y: {
             beginAtZero: true,

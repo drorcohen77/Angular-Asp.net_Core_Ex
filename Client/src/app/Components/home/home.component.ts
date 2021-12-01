@@ -22,6 +22,9 @@ export class HomeComponent implements OnInit {
   public companyDataB$: Observable<IcompanyDataRes[]> = this.mainService.RetrievedCompData_B;
   private empNumberB: Array<number> = [];
 
+  public companyDataC$: Observable<IcompanyDataRes[]> = this.mainService.RetrievedCompData_B;
+  private empData: any = [];
+
   constructor(private mainService: MainServiceService, private nav: Router) { }
 
   async ngOnInit() {
@@ -41,11 +44,13 @@ export class HomeComponent implements OnInit {
       this.empNumberB = data.map(({employees_number}) => employees_number);
       this.months = data.map(({month}) => month);
 
-      console.log(data)
     });
 
-    // if(this.months.length > 0)
-    //   this.createChart();
+    this.companyDataC$.subscribe(data => {
+
+      this.empData = data.map(d => ({x: d.month, y: d.employees_number }));
+    });
+
   }
 
 
@@ -58,19 +63,29 @@ export class HomeComponent implements OnInit {
           labels: this.months,
           datasets: [{
             type: 'bar',
-            label: 'Bar Dataset',
+            label: '# Company A Employees',
             data: this.empNumber,
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.2)'
-          }, {
+          }, 
+          {
             type: 'line',
-            label: 'Line Dataset',
+            label: '# Company B Employees',
             data: this.empNumberB,
             fill: false,
             borderColor: 'rgb(54, 162, 235)'
-          }]
+          },
+          {
+            type: 'scatter',
+            label: '# Company C Employees',
+            data: this.empData,
+            fill: false,
+            borderColor: 'rgb(54, 162, 235)'
+          },
+        ]
         },
         options: {
+          maintainAspectRatio:  false,
           scales: {
             y: {
               beginAtZero: true

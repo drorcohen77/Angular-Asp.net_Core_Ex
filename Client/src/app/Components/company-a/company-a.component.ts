@@ -14,8 +14,8 @@ import Chart from 'chart.js/auto';
 export class CompanyAComponent implements OnInit {
 
   public companyData$: Observable<IcompanyDataRes[]> = this.mainService.RetrievedCompData_A;
-  public empNumber: Array<number> = [];
-  public months: Array<string> = [];
+  private empNumber: Array<number> = [];
+  private months: Array<string> = [];
   public chart: any;
 
   constructor(private mainService: MainServiceService, private nav: Router) { }
@@ -27,7 +27,7 @@ export class CompanyAComponent implements OnInit {
       this.empNumber = data.map(({employees_number}) => employees_number);
       this.months = data.map(({month}) => month);
     });
-    
+
     this.createChart();
   }
 
@@ -72,6 +72,7 @@ export class CompanyAComponent implements OnInit {
           }]
       },
       options: {
+          maintainAspectRatio:  false,
           scales: {
               y: {
                   beginAtZero: true

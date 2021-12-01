@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 .divChart {
-    display: block;
-    width: "400";
-    height: "400";
+    position: relative;
+    margin: 40px;
+    width: 100vh;
+    height: 30vw;
 }
